@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/iqra-shams/chat-app/controllers"
+	"github.com/iqra-shams/chat-app/controllers/socket"
 )
 
 func main() {
@@ -16,8 +17,11 @@ func main() {
 	r.Post("/signup", controllers.SignUp)
 	r.Get("/migrate", controllers.Migrate)
 	r.Post("/login", controllers.Login)
-	r.Get("/ws", controllers.HandleSocketConnection)
-	go controllers.HandleMessages()
+
+	socketServer := socket.Server{}
+	socketServer.InitServer()
+	r.Get("/ws", socketServer.HandleSocketConnection)
+	go socketServer.HandleMessages()
 
 	fmt.Println("Starting server")
 

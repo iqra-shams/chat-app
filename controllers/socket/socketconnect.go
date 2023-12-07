@@ -1,4 +1,4 @@
-package controllers
+package socket
 
 import (
 	"fmt"
@@ -14,10 +14,8 @@ var upgrader = websocket.Upgrader{
 		return true
 	},
 }
-var clients = make(map[*websocket.Conn]string)
-var broadcast = make(chan utils.Message)
 
-func HandleSocketConnection(w http.ResponseWriter, r *http.Request) {
+func (s *Server) HandleSocketConnection(w http.ResponseWriter, r *http.Request) {
 
 	tokenString := r.Header.Get("Authorization")
 	if tokenString == "" {
@@ -40,20 +38,20 @@ func HandleSocketConnection(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer conn.Close()
-	
+
 	// var msg Message
 
-	clients[conn] = claims.Username
+	s.clients[conn] = claims.Username
 
 	for {
 		var msg utils.Message
 		err := conn.ReadJSON(&msg)
 		if err != nil {
 			fmt.Println(err)
-			delete(clients, conn)
+			delete(s.clients, conn)
 			return
 		}
 
-		broadcast <- msg
+		s.broadcast <- msg
 	}
 }

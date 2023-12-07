@@ -1,18 +1,18 @@
-package controllers
+package socket
 
 import "fmt"
 
-func HandleMessages() {
+func (s *Server) HandleMessages() {
 	for {
-		msg := <-broadcast
+		msg := <-s.broadcast
 
-		for client, username := range clients {
+		for client, username := range s.clients {
 			if username == msg.Receiver {
 				err := client.WriteJSON(msg.Message)
 				if err != nil {
 					fmt.Println(err)
 					client.Close()
-					delete(clients, client)
+					delete(s.clients, client)
 				}
 			}
 
