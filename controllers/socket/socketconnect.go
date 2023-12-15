@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/websocket"
+
 	"github.com/iqra-shams/chat-app/utils"
 	"github.com/iqra-shams/chat-app/validation"
 )
@@ -40,18 +41,37 @@ func (s *Server) HandleSocketConnection(w http.ResponseWriter, r *http.Request) 
 	defer conn.Close()
 
 	// var msg Message
+	member := utils.Memeber{
+		Username:   claims.Username,
+		Connection: conn,
+	}
 
-	s.clients[conn] = claims.Username
+	s.clients[claims.Username] =  &utils.Memeber{
+		Username:   claims.Username,
+		Connection: conn,
+	}
+	
 
 	for {
 		var msg utils.Message
 		err := conn.ReadJSON(&msg)
 		if err != nil {
 			fmt.Println(err)
-			delete(s.clients, conn)
+			delete(s.clients, claims.Username)
 			return
 		}
+		switch msg.Action {
+		case "creatroom":
+			s.CreateRoom(msg.RoomName, &member)
+		case "DM":
+			s.HandlePrivateMessages(&msg, &member)
+		case "joinroom":
+			s.JoinRoom(&member, msg.RoomName)
+		case "roomchat":
+			s.RoomChat(&msg,&member)
 
-		s.broadcast <- msg
+		}
+
 	}
+
 }

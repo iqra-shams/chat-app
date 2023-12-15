@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/iqra-shams/chat-app/models"
@@ -12,9 +11,7 @@ import (
 
 func Migrate(w http.ResponseWriter, r *http.Request) {
 	db := utils.ConnectDB()
-	fmt.Println("connected2")
 	defer db.Close()
-	fmt.Println("migrating")
 	db.AutoMigrate(&models.User{})
-
+	db.AutoMigrate(&models.Message{})
 }

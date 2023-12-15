@@ -12,6 +12,7 @@ import (
 func main() {
 
 	r := chi.NewRouter()
+	
 	// r.Use(middleware.Allow(middleware.AllowAll()))
 
 	r.Post("/signup", controllers.SignUp)
@@ -21,10 +22,12 @@ func main() {
 	socketServer := socket.Server{}
 	socketServer.InitServer()
 	r.Get("/ws", socketServer.HandleSocketConnection)
-	go socketServer.HandleMessages()
+	
+
+	// go socketServer.HandleMessages()
 
 	fmt.Println("Starting server")
 
-	http.ListenAndServe(":3000", r)
+	http.ListenAndServe(":3333", r)
 
 }
