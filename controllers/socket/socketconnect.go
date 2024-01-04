@@ -40,13 +40,13 @@ func (s *Server) HandleSocketConnection(w http.ResponseWriter, r *http.Request) 
 
 	defer conn.Close()
 
-	// var msg Message
+	
 	member := utils.Memeber{
 		Username:   claims.Username,
 		Connection: conn,
 	}
 
-	s.clients[claims.Username] =  &utils.Memeber{
+	s.clients[""] =  &utils.Memeber{
 		Username:   claims.Username,
 		Connection: conn,
 	}

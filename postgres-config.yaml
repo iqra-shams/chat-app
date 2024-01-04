@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: default
+data:
+  DB_HOST: "postgres"  # Use ClusterIP or ExternalIP here
+  DB_NAME: "chat"
+  APPLICATION_NAME: chatting_app
+  DB_PASSWORD: "1234"
+  DB_USER: "postgres"
+

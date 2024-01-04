@@ -13,5 +13,5 @@ func Migrate(w http.ResponseWriter, r *http.Request) {
 	db := utils.ConnectDB()
 	defer db.Close()
 	db.AutoMigrate(&models.User{})
-	db.AutoMigrate(&models.Message{})
+	// db.AutoMigrate(&models.Message{})
 }

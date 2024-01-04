@@ -7,7 +7,7 @@ import (
 )
 
 type Message struct {
-	RoomName string `json:"RoomName"`
+	RoomName string `json:"roomname"`
 	Message  string `json:"message"`
 	Receiver string `json:"to"`
 	Action   string `json:"action"`

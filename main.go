@@ -9,11 +9,21 @@ import (
 	"github.com/iqra-shams/chat-app/controllers/socket"
 )
 
+func healthHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
+func readinessHandler(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
 func main() {
 
 	r := chi.NewRouter()
 	
 	// r.Use(middleware.Allow(middleware.AllowAll()))
+	r.HandleFunc("/health", healthHandler)
+	r.HandleFunc("/readiness", readinessHandler)
 
 	r.Post("/signup", controllers.SignUp)
 	r.Get("/migrate", controllers.Migrate)
